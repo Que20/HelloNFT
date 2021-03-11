@@ -1,4 +1,3 @@
-const Web3 = require("web3")
 const HelloContract = require("../abi/Hello.json")
 
 module.exports = function() {
@@ -20,37 +19,29 @@ module.exports = function() {
 			const address = networkData.address
 			this.contract = new this.web3.eth.Contract(abi, address)
 		} else {
-			console.log('No network data')
+			// TODO : notify unable to retreive network data
 		}
-		if(this.account) {
-			//console.log(this.account)
-		} else {
-			console.log('No account')
+		if(this.account == null) {
+			// TODO : notify unable to acces the metamask account
 		}
-		if(this.contract) {
-			//console.log(this.contract)
-		} else {
-			console.log('No contract')
+		if(this.contract == null) {
+			// TODO : notify unable to get the smart contract
 		}
-		const totalSupply = await this.contract.methods.totalSupply().call()
-		//console.log(totalSupply)
-		//this.web3.eth.getTransaction('0x08e00d07ee0b5f9640327c61019b1af45c86668bdf71c7e8f07427230f982a2f', (err, res) => {
-			//console.log(res)
-		//})
-		
 	}
 
-	this.mint = function(nickname, callback) {
+	this.mint = function(callback) {
 		var mintTxHash = null
-		this.contract.methods.mint(nickname).send({from: this.account}, function(error, result) {
+		this.contract.methods.mint().send({from: this.account}, function(error, result) {
 			mintTxHash = result
+            // TODO : handle error
+            // TODO : notify mint sent + waiting for miners validation
 		})
 		this.contract.events.allEvents((error, event) => {
             console.log(event)
 			if (event != null && mintTxHash != null) {
-				if (event.transactionHash == mintTxHash && event.returnValues.nickname == nickname) {
+				if (event.transactionHash == mintTxHash && event.returnValues.to == this.account) {
                     console.log(event.returnValues)
-					callback(event.returnValues.tokenId)
+					callback(event.returnValues)
 				}
 			}
 		})
@@ -68,7 +59,6 @@ module.exports = function() {
                     }
                 })
             }
-        })
-        
+        })       
     }
 }
