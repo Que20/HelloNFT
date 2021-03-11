@@ -31,10 +31,14 @@ app.use((req, res, next) => {
 app.get('/api/token/:tokenId', async (req, res) => {
     if (req.params.tokenId != null) {
         const user = await Token.findOne({ token_id: req.params.tokenId })
-        res.json({
-            name: user.nickname,
-            description: user.address
-        })
+        if (user) {
+            res.json({
+                name: user.nickname,
+                description: user.address
+            })
+        } else {
+            res.json({})
+        }
     } else {
         res.status(400)
     }
