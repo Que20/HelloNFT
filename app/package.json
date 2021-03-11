@@ -11,7 +11,8 @@
     "semantic-ui-react": "latest",
     "semantic-ui-css": "latest",
     "web3": "latest",
-    "react-router-dom": "latest"
+    "react-router-dom": "latest",
+    "generate-avatar": "latest"
   },
   "scripts": {
     "start": "react-scripts start",
