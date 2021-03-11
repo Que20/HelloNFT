@@ -27,9 +27,72 @@ label {
     height: 120px;
     animation: spin 2s linear infinite;
     margin: auto;
-  }
-  
-  @keyframes spin {
+}
+
+@keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-  }
+}
+
+.avatar {
+    width: 144px;
+    height: 144px;
+    margin: auto;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    margin: auto;
+}
+
+.ui.secondary.pointing.menu {
+    margin: 0;
+    border-bottom: 2px solid white;
+    padding-left: -15px;
+    padding-right: 15px;
+    margin-right: -15px;
+    box-shadow: 0px 15px 10px -15px #A3A8B4;
+}
+
+.menu_avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    margin: auto;
+}
+
+.menu_avatar {
+    padding: 10px;
+    padding-right: 15px;
+    width: 65px;
+    height: 60px;
+    margin: auto;
+    float: right;
+}
+
+.title {
+    font-size: 30px;
+    font-weight: bold;
+    padding-left: 15px;
+    margin-top: 15px;
+}
+
+.ui.grid.top_menu_grid {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.ui.grid.top_menu_grid>.column:not(.row) {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.column {
+    margin-top: 0px;
+}
+
+.main_container {
+    margin-top: 50px;
+}
