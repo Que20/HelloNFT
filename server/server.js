@@ -8,7 +8,8 @@ const db = mongoose.connection
 
 const Token = mongoose.model('token', mongoose.Schema({
     token_id: Number,
-    nickname: String
+    nickname: String,
+    address: String,
 }), 'token')
 
 const Address = mongoose.model('address', mongoose.Schema({
@@ -31,7 +32,8 @@ app.get('/api/token/:tokenId', async (req, res) => {
     if (req.params.tokenId != null) {
         const user = await Token.findOne({ token_id: req.params.tokenId })
         res.json({
-            name: user.nickname
+            name: user.nickname,
+            description: user.address
         })
     } else {
         res.status(400)
@@ -51,11 +53,12 @@ app.get('/api/contract', (req, res) => {
 app.post('/api/token/', async (req, res) => {
     let nick = req.body.nickname
     let token = req.body.token_id
+    let address = req.body.address
     if (token != null) {
         const exists = await Token.findOne({ token_id: token })
         if (exists == null) {
             if (nick != null && token != null) {
-                const newToken = await Token.create({token_id: token, nickname: nick, })
+                const newToken = await Token.create({token_id: token, nickname: nick, address: address})
                 if (newToken != null) {
                     res.status(200)
                     res.end()
