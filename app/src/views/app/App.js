@@ -22,8 +22,6 @@ class App extends Component {
 	constructor(props) {
 		super(props)
 		this.state = { account: null, eth: null, menuItem: -1 } // Default states
-        this.menuAction = this.menuAction.bind(this)
-        this.mintButtonAction = this.mintButtonAction.bind(this)
         this.api = new API()
 	}
 
@@ -102,7 +100,7 @@ class App extends Component {
 
     // ACTIONS
 
-    menuAction(event) {
+    menuAction = (event) => {
         if (event.target.name == "home") {
             this.setState({ menuItem : 0 })
         }
@@ -111,7 +109,7 @@ class App extends Component {
         }
     }
 
-    mintButtonAction() {
+    mintButtonAction = () => {
         this.state.eth.mint((returnValues) => {
             let tokenId = returnValues.tokenId
             this.api.registerNewToken(tokenId, this.state.eth.account, (success) => {
