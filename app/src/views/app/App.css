@@ -34,19 +34,6 @@ label {
     100% { transform: rotate(360deg); }
 }
 
-.avatar {
-    width: 144px;
-    height: 144px;
-    margin: auto;
-}
-
-.avatar img {
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    margin: auto;
-}
-
 .ui.secondary.pointing.menu {
     margin: 0;
     border-bottom: 2px solid white;
