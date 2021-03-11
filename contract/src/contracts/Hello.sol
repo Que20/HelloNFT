@@ -5,8 +5,8 @@ import "@openzeppelin/contracts/ownership/Ownable.sol";
 
 contract Hello is ERC721Tradable {
 
-    event UserCreation(string nickname, uint tokenId, address sender);
-    uint public currentTokenId;
+    //event UserCreation(string nickname, uint tokenId, address sender);
+    //uint public currentTokenId;
 
     constructor(address _proxyRegistryAddress) public ERC721Tradable("Hello", "HELLO", _proxyRegistryAddress) { }
 
@@ -18,10 +18,12 @@ contract Hello is ERC721Tradable {
         return "localhost:8888/contract";
     }
 
-    function mint(string memory nickname) public {
-        currentTokenId = currentTokenId + 1;
-        emit UserCreation(nickname, currentTokenId, msg.sender);
-        _mint(msg.sender, currentTokenId);
+    function mint() public {
+    //function mint(string memory nickname) public {
+        // currentTokenId = currentTokenId + 1;
+        // emit UserCreation(nickname, currentTokenId, msg.sender);
+        // _mint(msg.sender, currentTokenId);
         //currentTokenId = newId;
+        mintTo(msg.sender);
     }
 }
