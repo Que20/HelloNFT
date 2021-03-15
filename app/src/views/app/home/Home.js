@@ -61,7 +61,8 @@ class TokenList extends Component {
                         let address = token.data.description
                         let id = token.tokenId
                         return (
-                            <div class="ui comments">
+                            <a href="#" className=''>
+                            <div class="token_item ui comments">
                                 <div class="comment">
                                     <a class="avatar" href="#">
                                         <img src={`data:image/svg+xml;utf8,${generateFromString(address)}`} alt=""/>
@@ -78,8 +79,9 @@ class TokenList extends Component {
                                         this.transfert(id, nick, address) 
                                     }}>Transfert</Button>
                                 </div>
-                                <div className='separator'></div>
                             </div>
+                            <div className='separator'></div>
+                            </a>
                         )
                     })
                 }
