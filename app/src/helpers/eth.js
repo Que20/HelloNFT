@@ -1,15 +1,26 @@
 const HelloContract = require("../abi/Hello.json")
 
-module.exports = function() {
-	this.web3 = null
-	this.account = null
-	this.contract = null
+class ETH {
 
-	this.init = async function(web3) {
+    constructor() {
+        this.web3 = null
+        this.account = null
+        this.contract = null
+        this.notifier = null
+    }
+	
+	init = (web3, notifier) => {
 		this.web3 = web3
+        this.notifier = notifier
 	}
 
-	this.loadBlockchainData = async function() {
+    notifyView = (text) => {
+        if (this.notifier != null) {
+            this.notifier(text)
+        }
+    }
+
+	loadBlockchainData = async () => {
 		const accounts = await this.web3.eth.getAccounts()
 		this.account = accounts[0]
 		const networkId = await this.web3.eth.net.getId()
@@ -19,35 +30,49 @@ module.exports = function() {
 			const address = networkData.address
 			this.contract = new this.web3.eth.Contract(abi, address)
 		} else {
-			// TODO : notify unable to retreive network data
+			this.notifyView("Unable to retreive network data")
 		}
 		if(this.account == null) {
-			// TODO : notify unable to acces the metamask account
+            this.notifyView("Unable to acces the metamask account")
 		}
 		if(this.contract == null) {
-			// TODO : notify unable to get the smart contract
+            this.notifyView("Unable to get the smart contract")
 		}
 	}
 
-	this.mint = function(callback) {
+	mint = (callback) => {
 		var mintTxHash = null
-		this.contract.methods.mint().send({from: this.account}, function(error, result) {
+		this.contract.methods.mint().send({from: this.account}, (error, result) => {
 			mintTxHash = result
             // TODO : handle error
-            // TODO : notify mint sent + waiting for miners validation
+            if (error == null) {
+                this.notifyView("Token successfully minted. Now waiting for miners validation. This could take a few minutes.")
+            } else {
+                this.notifyView("Oops, something happend. No token were minted. Try again.")
+            }
+            
 		})
 		this.contract.events.allEvents((error, event) => {
             console.log(event)
 			if (event != null && mintTxHash != null) {
 				if (event.transactionHash == mintTxHash && event.returnValues.to == this.account) {
-                    console.log(event.returnValues)
 					callback(event.returnValues)
 				}
 			}
 		})
 	}
 
-    this.getTokens = function(callback) {
+    transfert = (id, dest, callback) => {
+        this.contract.methods.transferFrom(this.account, dest, id).send({from: this.account}, (error, result) => {
+            if (error == null) {
+                this.notifyView("Token sucessfully transfered.")
+            } else {
+                this.notifyView("Oops, something happend. Try again.")
+            }
+		})
+    }
+
+    getTokens = (callback) => {
         var owned = []
         this.contract.methods.balanceOf(this.account).call((err, res) => {
             var i = 0
@@ -62,3 +87,4 @@ module.exports = function() {
         })       
     }
 }
+export default ETH
