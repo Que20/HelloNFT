@@ -3,17 +3,19 @@ import React, { Component } from 'react'
 // Tools
 import Web3 from 'web3'
 import { generateFromString } from 'generate-avatar'
+import { ToastContainer, toast } from 'react-toastify'
 
 // Views+Components
 import Home from './home/Home'
 import Marketplace from './market/Marketplace'
 
 // Style
+import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
 
 // Helpers
 import API from '../../helpers/api'
-const ETH = require('../../helpers/eth')
+import ETH from '../../helpers/eth'
 
 // Main component for /app route
 // Called in index's router
@@ -33,7 +35,9 @@ class App extends Component {
 		} else if (window.web3) {
 			window.web3 = new Web3(window.web3.currentProvider)
 		}
-		await myEth.init(window.web3)
+		await myEth.init(window.web3, (notification) => {
+            this.showToast(notification)
+        })
 		await myEth.loadBlockchainData()
 		this.setState({ account: myEth.account })
 		this.setState({ eth: myEth})
@@ -43,6 +47,8 @@ class App extends Component {
     render() {
 		return (
             <div>
+                <ToastContainer />
+                <div className="main_header">
                 <div className="ui grid top_menu_grid">
                     <div className="left floated ten wide column">
                         <div className="ui">
@@ -72,12 +78,9 @@ class App extends Component {
                         </div>
                     </div>
                 </div>
+                </div>
                 <div className="main_container">
-                    <main className="ui center aligned grid">
-                        <div className="column">
-                            { this.showBody() }
-                        </div>
-                    </main>
+                    { this.showBody() }
                 </div>
             </div>
 		);
@@ -113,8 +116,22 @@ class App extends Component {
         this.state.eth.mint((returnValues) => {
             let tokenId = returnValues.tokenId
             this.api.registerNewToken(tokenId, this.state.eth.account, (success) => {
-                console.log('done minting token '+tokenId)
+                this.showToast('Successfully minted a new token (id:'+tokenId+')')
+                // reload page
+                this.showBody()
             })
+        })
+    }
+
+    showToast = (message) => {
+        toast.info(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
         })
     }
 }
