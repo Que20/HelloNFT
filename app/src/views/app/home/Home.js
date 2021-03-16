@@ -13,7 +13,8 @@ class TokenList extends Component {
             tokenIdList: [],
             tokenList: [],
             modalShown: false,
-            transfertTokenData: null
+            transfertTokenData: null,
+            selectedTokenData: null
         }
 	}
 
@@ -61,7 +62,9 @@ class TokenList extends Component {
                         let address = token.data.description
                         let id = token.tokenId
                         return (
-                            <a href="#" className=''>
+                            <a href="#" className='' onClick={() => {
+                                this.didSelect(id, nick, address) 
+                            }}>
                             <div class="token_item ui comments">
                                 <div class="comment">
                                     <a class="avatar" href="#">
@@ -87,12 +90,31 @@ class TokenList extends Component {
                 }
                 </div>
                 <div className='column conversation_box left aligned'>
-                    
+                    { this.detail() }
                 </div>
                 </div>
             </div>
 		)
 	}
+
+    detail = () => {
+        if (this.state.selectedTokenData != null) {
+            if (this.state.selectedTokenData.address == this.props.eth.account) {
+                return (
+                    <div>
+                    <h3>You cannot chat with yourself.</h3>
+                    <p>Transfert your token to a friend or sell it in the Marketplace ;)</p>
+                    </div>
+                )
+            }
+            return (
+                <h3>Chatting with {this.state.selectedTokenData.nick}</h3>
+            )
+        } else {
+            return <h3>Select someone you want to chat with</h3>
+        }
+
+    }
 
     transfert = (id, nick, address) => {
         this.setState({ modalShown: true })
@@ -100,7 +122,15 @@ class TokenList extends Component {
             id: id,
             nick: nick,
             address: address
-        } })
+        }})
+    }
+
+    didSelect = (id, nick, address) => {
+        this.setState({ selectedTokenData: {
+            id: id,
+            nick: nick,
+            address: address
+        }})
     }
 }
 

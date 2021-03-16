@@ -91,7 +91,11 @@ label {
 }
 
 .token_list {
-    /* background-color: hotpink; */
+    margin-top: -10px;
+}
+
+.ui.comments {
+    margin:0;
 }
 
 .conversation_box {
